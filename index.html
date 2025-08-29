@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sushank | Full Stack Portfolio</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root
+   {
+  --primary: #b78eea;
+  --primary-light: #b494d3;
+  --dark: #000000;
+  --light: #fff; /* Changed to pure white for a lighter text color */
+  --gray: #888;
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--light);
+      overflow-x: hidden;
+      transition: var(--transition);
+    }
+    body.light-mode {
+      background: #f8f9fa;
+      color:    #333;
+    }
+    body.light-mode .card,
+    body.light-mode .table,
+    body.light-mode details {
+      background: white;
+      color: #333;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    body.light-mode .glass {
+      background: rgba(223, 119, 119, 0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    body.light-mode .btn-primary {
+      background: linear-gradient(90deg, #a259ec 0%, #6c2eb7 100%);
+    }
+    body.light-mode .gradient-text {
+      background: linear-gradient(90deg, #a259ec, #6c2eb7, #181824);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    body.light-mode .navbar {
+      background: rgba(255, 255, 255, 0.95) !important;
+      backdrop-filter: blur(10px);
+    }
+    body.light-mode .navbar .nav-link { color: var(--dark) !important; }
+    body.light-mode .navbar .nav-link:hover { color: var(--primary) !important; }
+    body.light-mode .lead { color: #6c757d !important; }
+    body.light-mode pre { background-color: #e9ecef; color: #212529; }
+    .gradient-text {
+      background: linear-gradient(90deg, var(--primary-light), var(--primary), var(--dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
+    }
+    .glass {
+      background: rgba(40, 30, 60, 0.15);
+      box-shadow: 0 8px 32px 0 rgba(40, 30, 60, 0.37);
+      backdrop-filter: blur(8px);
+      border-radius: 16px;
+      border: 1px solid rgba(40, 30, 60, 0.18);
+    }
+    .card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 2px 16px rgba(118, 7, 254, 0.08);
+      transition: var(--transition);
+      background: var(--dark);
+      color: var(--light);
+      overflow: hidden;
+      position: relative;
+    }
+    .card:hover {
+      box-shadow: 0 8px 32px rgba(222, 75, 75, 0.18);
+      transform: translateY(-4px) scale(1.02);
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary) 100%);
+      border: none;
+      transition: var(--transition);
+      color: white;
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+    .navbar {
+      background: transparent !important;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+    .navbar.scrolled { background: rgba(24, 24, 36, 0.95) !important; }
+    .navbar .nav-link { color: rgba(255, 255, 255, 0.8) !important; }
+    .section { scroll-margin-top: 80px; position: relative; }
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+    }
+    .parallax-bg {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 150%;
+      background: linear-gradient(135deg, rgba(115, 8, 247, 0.1) 0%, rgba(51, 51, 233, 0.3) 100%);
+      z-index: -1; opacity: 0.3;
+    }
+    .typed-text {
+      border-right: 3px solid var(--primary-light);
+      animation: blink 0.7s step-end infinite;
+    }
+    @keyframes blink { 50% { border-color: transparent; } }
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: linear-gradient(90deg, var(--primary-light), var(--primary));
+      z-index: 1000; width: 0%;
+    }
+    .scroll-to-top {
+      position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; opacity: 0; transition: var(--transition); z-index: 1000;
+    }
+    .scroll-to-top.visible { opacity: 1; }
+    .profile-image-container {
+      width: 200px; height: 200px; border-radius: 50%; overflow: hidden;
+      border: 3px solid var(--primary);
+      box-shadow: 0 0 20px rgba(183, 142, 234, 0.3);
+    }
+    .profile-image { width: 100%; height: 100%; object-fit: cover; }
+    .social-link { color: var(--primary); font-size: 1.5rem; transition: var(--transition); }
+    .social-link:hover { color: var(--primary-light); transform: translateY(-3px); }
+    .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+    .particle { position: absolute; border-radius: 50%; opacity: 0.5; }
+    .mode-toggle {
+      position: fixed; bottom: 30px; left: 30px; width: 50px; height: 50px;
+      border-radius: 50%; background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: 0 4px 15px rgba(108, 46, 183, 0.3);
+      z-index: 999; transition: var(--transition);
+    }
+    body.light-mode .mode-toggle { background: var(--dark); }
+    pre {
+      background-color: #d59191; color: #f3f3f3; padding: 1rem;
+      border-radius: 0.5rem; overflow-x: auto;
+    }
+    .counter-display { font-size: 2.5rem; font-weight: bold; color: var(--primary); }
+    details {
+        border: 1px solid var(--primary-light);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 1rem;
+        background: var(--dark);
+    }
+    summary { cursor: pointer; font-weight: bold; color: var(--primary); }
+    @media (max-width: 991px) {
+      .hero { text-align: center; }
+      .card:hover { transform: none; }
+      .profile-section { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-progress"></div>
+  <div class="mode-toggle" id="modeToggle"><i class="bi bi-moon"></i></div>
+  <a href="#hero" class="scroll-to-top" id="scrollTop" aria-label="Scroll to top"><i class="bi bi-arrow-up"></i></a>
+  <div class="particles" id="particles"></div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">E-Portfolio</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav mx-auto align-items-lg-center gap-lg-4">
+          <li class="nav-item"><a class="nav-link" href="#fullstack">Full Stack</a></li>
+          <li class="nav-item"><a class="nav-link" href="#html">HTML</a></li>
+          <li class="nav-item"><a class="nav-link" href="#css">CSS</a></li>
+          <li class="nav-item"><a class="nav-link" href="#bootstrap">Bootstrap</a></li>
+          <li class="nav-item"><a class="nav-link" href="#javascript">JavaScript</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <header class="hero" id="hero">
+    <div class="parallax-bg"></div>
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-10 text-center">
+          <div class="profile-section d-flex align-items-center justify-content-center gap-4 flex-wrap">
+            <div class="profile-image-container" data-aos="fade-right" data-aos-delay="200">
+              <img src="sushank.jpg" alt="Sushank" class="profile-image">
+            </div>
+            <div class="text-content text-lg-start">
+              <h1 class="display-4 fw-bold mb-3" data-aos="fade-up" data-aos-delay="400" style="color:#b78eea;">Hi, I'm Sushank.</h1>
+              <p class="lead mb-4" data-aos="fade-up" data-aos-delay="600">
+                <span id="typedText"></span>
+              </p>
+              <div class="social-links d-flex gap-3 justify-content-center justify-content-lg-start" data-aos="fade-up" data-aos-delay="800">
+                <a href="#" class="social-link" aria-label="GitHub"><i class="bi bi-github"></i></a>
+                <a href="#" class="social-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                <a href="#" class="social-link" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section id="fullstack" class="section py-5" data-aos="fade-up">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <h2 class="mb-4 fw-bold gradient-text text-center" data-aos="zoom-in">What is Full Stack Development?</h2>
+            <div class="card shadow-sm" data-aos="fade-up" data-aos-delay="200">
+              <div class="card-body p-4">
+                <p>Full stack development refers to the ability to work on both the <strong>front-end</strong> (client-side) and <strong>back-end</strong> (server-side) of web applications. A full stack developer is skilled in designing user interfaces, writing client-side code (HTML, CSS, JavaScript), and building server-side logic and databases. This portfolio demonstrates my understanding of the core technologies used in modern web development.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="html" class="section py-5" data-aos="fade-up">
+      <div class="container">
+        <h2 class="mb-4 fw-bold gradient-text text-center" data-aos="zoom-in">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML" width="40" class="tech-icon"/>HTML: The Skeleton of the Web
+        </h2>
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+             <div class="card glass shadow-sm mb-4" data-aos="fade-up">
+                <div class="card-body p-4">
+                    <p><strong>HTML (HyperText Markup Language)</strong> is the standard language for creating web pages. It provides the fundamental structure of sites, which is then enhanced by technologies like CSS and JavaScript. Think of it as the skeleton that gives a website its form.</p>  
+                    <details>
+                        <summary>Commonly Used Tags</summary>
+                        <p class="mt-3">HTML uses tags to define content elements. Here are some of the most essential ones:</p>
+                        <ul>
+                            <li><code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code> for headings.</li>
+                            <li><code>&lt;p&gt;</code> for paragraphs.</li>
+                            <li><code>&lt;a href="..."&gt;</code> for links (anchors).</li>
+                            <li><code>&lt;img src="..." alt="..."&gt;</code> for images. The `alt` text is crucial for accessibility.</li>
+                            <li><code>&lt;ul&gt;</code> (unordered list) and <code>&lt;ol&gt;</code> (ordered list), with <code>&lt;li&gt;</code> (list item) elements inside.</li>
+                            <li><code>&lt;div&gt;</code> a generic container for grouping content.</li>
+                        </ul>
+                    </details>
+                    <details>
+                        <summary>Semantic HTML</summary>
+                         <p class="mt-3">Using meaningful tags improves accessibility and SEO. These tags explain their content to both the browser and the developer.</p>
+                        <pre><code>&lt;header&gt; &lt;!-- for introductory content or nav links --&gt;
+&lt;nav&gt;    &lt;!-- for navigation links --&gt;
+&lt;main&gt;   &lt;!-- for the main content of the document --&gt;
+&lt;article&gt;&lt;!-- for self-contained content --&gt;
+&lt;section&gt;&lt;!-- for grouping related content --&gt;
+&lt;aside&gt;  &lt;!-- for side content (like a sidebar) --&gt;
+&lt;footer&gt; &lt;!-- for footer content --&gt;</code></pre>
+                    </details>
+                    <details>
+                        <summary>Forms for User Input</summary>
+                        <p class="mt-3">Forms are essential for collecting user data. The <code>&lt;form&gt;</code> element is a container for different types of input elements.</p>
+                        <pre><code>&lt;form&gt;
+  &lt;label for="username"&gt;Username:&lt;/label&gt;
+  &lt;input type="text" id="username" name="username"&gt;
+  
+  &lt;label for="password"&gt;Password:&lt;/label&gt;
+  &lt;input type="password" id="password" name="password"&gt;
+  
+  &lt;input type="submit" value="Submit"&gt;
+&lt;/form&gt;</code></pre>
+                    </details>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="css" class="section py-5" data-aos="fade-up">
+        <div class="container">
+             <h2 class="mb-4 fw-bold gradient-text text-center" data-aos="zoom-in">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS" width="40" class="tech-icon"/>CSS: Styling the Web
+             </h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                     <div class="card glass shadow-sm mb-4" data-aos="fade-up">
+                        <div class="card-body p-4">
+                            <p><strong>CSS (Cascading Style Sheets)</strong> is the language used to style and lay out web pages. If HTML is the skeleton, CSS is the clothing—it controls colors, fonts, spacing, and the overall visual presentation.</p>
+                            <details>
+                                <summary>Selectors and Properties</summary>
+                                <p class="mt-3">CSS works by pairing selectors with properties. A selector targets an HTML element, and the properties define its style.</p>
+                                <pre><code>/* Selects all paragraphs */
+p {
+  color: #333; /* property: value */
+  font-size: 16px;
+}
+
+/* Selects elements with class="highlight" */
+.highlight {
+  background-color: yellow;
+}
+
+/* Selects the element with id="header" */
+#header {
+  border-bottom: 2px solid var(--primary);
+}</code></pre>
+                            </details>
+
+                            <details>
+                                <summary>The Box Model</summary>
+                                <p class="mt-3">Every element in HTML is a rectangular box. The CSS box model describes how these boxes are sized and spaced. It consists of the content, padding, border, and margin.</p>
+                                <div class="text-center my-3"><img src="https://i.imgur.com/39a6W4v.png" alt="CSS Box Model Diagram" class="img-fluid rounded"></div>
+                                
+                            </details>
+
+                            <details>
+                                <summary>Modern Layouts: Flexbox and Grid</summary>
+                                 <p class="mt-3">CSS has powerful tools for creating complex, responsive layouts.</p>
+                                <p><strong>Flexbox</strong> is designed for one-dimensional layouts (a row or a column). It makes it easy to align items vertically and horizontally.</p>
+                                
+                                <pre><code>.container {
+  display: flex;
+  justify-content: space-between; /* Aligns items along the main axis */
+  align-items: center;          /* Aligns items along the cross axis */
+}</code></pre>
+                                <p class="mt-3"><strong>CSS Grid</strong> is designed for two-dimensional layouts (rows and columns). It's perfect for creating complex page structures.</p>
+                                
+                                <pre><code>.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* Creates three equal columns */
+  gap: 1rem;                          /* Adds space between grid items */
+}</code></pre>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="bootstrap" class="section py-5" data-aos="fade-up">
+        <div class="container">
+            <h2 class="mb-4 fw-bold gradient-text text-center" data-aos="zoom-in">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap" width="40" class="tech-icon"/>Bootstrap: Rapid UI Development
+            </h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                     <div class="card glass shadow-sm mb-4" data-aos="fade-up">
+                        <div class="card-body p-4">
+                            <p><strong>Bootstrap</strong> is a powerful, open-source CSS framework for responsive, mobile-first web development. It provides a vast library of pre-styled components and a powerful grid system, allowing you to build beautiful websites quickly.</p>
+                            <details>
+                                <summary>The Grid System</summary>
+                                <p class="mt-3">Bootstrap's grid system uses a series of containers, rows, and columns to lay out and align content. It’s built with flexbox and is fully responsive. You use classes like <code>.col-md-6</code> to specify column widths at different screen sizes (breakpoints).</p>
+                                <pre><code>&lt;div class="container"&gt;
+  &lt;div class="row"&gt;
+    &lt;!-- On medium screens and up, this is 6/12 width --&gt;
+    &lt;div class="col-md-6"&gt;Column 1&lt;/div&gt;
+    &lt;!-- On medium screens and up, this is 6/12 width --&gt;
+    &lt;div class="col-md-6"&gt;Column 2&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                            </details>
+                            <details>
+                                <summary>Utility Classes</summary>
+                                <p class="mt-3">A core feature of Bootstrap 5 is its extensive library of utility classes. These let you apply styles directly in your HTML without writing custom CSS.</p>
+                                <ul>
+                                    <li><strong>Spacing:</strong> <code>.m-3</code> (margin), <code>.p-4</code> (padding).</li>
+                                    <li><strong>Colors:</strong> <code>.bg-primary</code>, <code>.text-success</code>.</li>
+                                    <li><strong>Display:</strong> <code>.d-flex</code> (display: flex), <code>.d-none</code> (display: none).</li>
+                                    <li><strong>Borders:</strong> <code>.border</code>, <code>.rounded-pill</code>.</li>
+                                </ul>
+                                <pre><code>&lt;div class="bg-dark text-white p-5 rounded"&gt;Hello!&lt;/div&gt;</code></pre>
+                            </details>
+                            <details>
+                                <summary>Interactive Components</summary>
+                                <p class="mt-3">Bootstrap includes JavaScript plugins for interactive components like modals, carousels, and accordions.</p>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                  Launch Modal
+                                </button>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="javascript" class="section py-5" data-aos="fade-up">
+      <div class="container">
+        <h2 class="mb-4 fw-bold gradient-text text-center" data-aos="zoom-in">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="40" class="tech-icon"/>JavaScript: Making the Web Interactive
+        </h2>
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="card glass shadow-sm mb-4" data-aos="fade-up">
+                <div class="card-body p-4">
+                    <p><strong>JavaScript (JS)</strong> is a programming language that brings web pages to life. It allows you to create dynamic content, control multimedia, animate images, and much more. It's the engine that powers interactive web experiences.</p>
+                    <details>
+                        <summary>Variables and Data Types</summary>
+                        <p class="mt-3">Variables are containers for storing data. JavaScript has several data types:</p>
+                        <ul>
+                            <li><strong>String:</strong> Text, like `"Hello World"`.</li>
+                            <li><strong>Number:</strong> Numeric values, like `100` or `3.14`.</li>
+                            <li><strong>Boolean:</strong> Logical values, either `true` or `false`.</li>
+                            <li><strong>Object:</strong> A collection of key-value pairs, like `{ name: 'Sushank', skill: 'Web Dev' }`.</li>
+                            <li><strong>Array:</strong> A list of values, like `['HTML', 'CSS', 'JS']`.</li>
+                        </ul>
+                        <pre><code>const name = "Sushank"; // A string
+let age = 25;           // A number
+const isDeveloper = true; // A boolean</code></pre>
+                    </details>
+                    <details>
+                        <summary>Functions</summary>
+                        <p class="mt-3">Functions are reusable blocks of code that perform a specific task. They are a fundamental building block of JavaScript.</p>
+                        <pre><code>// Defines a function named 'greet' that takes one parameter
+function greet(name) {
+  return `Hello, ${name}!`;
+}
+
+// Calls the function and logs the result
+console.log(greet("World")); // Outputs: "Hello, World!"</code></pre>
+                    </details>
+
+                    <details>
+                        <summary>DOM Manipulation & Events</summary>
+                        <p class="mt-3">JavaScript can interact with the HTML and CSS of a page through the <strong>Document Object Model (DOM)</strong>. It can select elements, change their content or style, and react to user actions (<strong>events</strong>) like clicks, key presses, or mouse movements.</p>
+                         <pre><code>// 1. Select the button element
+const myButton = document.getElementById('increment-btn');
+
+// 2. Add an event listener to listen for clicks
+myButton.addEventListener('click', function() {
+  // 3. This code runs when the button is clicked
+  alert('Button was clicked!');
+});</code></pre>
+                    </details>
+                    
+                    <h4 class="mt-4">Live Examples</h4>
+                    <div class="card mt-3 ">
+                      <div class="card-body text-center">
+                        <h5 class="card-title">Interactive Counter</h5>
+                        <div class="counter-display mb-3" id="counter-display">0</div>
+                        <div class="d-flex justify-content-center gap-2">
+                          <button id="increment-btn" class="btn btn-primary">Increment</button>
+                          <button id="decrement-btn" class="btn btn-secondary">Decrement</button>
+                          <button id="reset-btn" class="btn btn-danger">Reset</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card mt-4">
+                      <div class="card-body">
+                        <h5 class="card-title">Form Validation</h5>
+                        <form id="demo-form" novalidate>
+                          <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="form-name" required>
+                            <div class="invalid-feedback">Please provide a name.</div>
+                          </div>
+                          <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="form-email" required>
+                            <div class="invalid-feedback">Please provide a valid email.</div>
+                          </div>
+                          <button type="submit" class="btn btn-primary">Submit</button>
+                           <p id="form-status" class="mt-3"></p>
+                        </form>
+                      </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <footer class="text-center py-4 mt-5">
+    <div class="container small text-muted">
+      © <span id="year"></span> Full Stack Developer Portfolio • Built with Bootstrap.
+    </div>
+  </footer>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Bootstrap Modal</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          This is a live demo of a Bootstrap modal. It's an interactive component powered by Bootstrap's JavaScript.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+      AOS.init({
+        duration: 800,
+        easing: 'ease-out-cubic',
+        once: true
+      });
+
+
+      const typedTextEl = document.getElementById('typedText');
+      if (typedTextEl) {
+        const text = "Welcome to my Portfolio. This was a project for the Full Stack Development Course in Module CET 138.";
+        let index = 0;
+        const type = () => {
+          if (index < text.length) {
+            typedTextEl.textContent += text.charAt(index);
+            index++;
+            setTimeout(type, 40);
+          }
+        };
+        const heroSection = document.getElementById('hero');
+        const observer = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            type();
+            observer.disconnect();
+          }
+        }, { threshold: 0.1 });
+        observer.observe(heroSection);
+      }
+      
+    
+      const scrollProgressBar = document.querySelector('.scroll-progress');
+      const scrollTopBtn = document.getElementById('scrollTop');
+      const navbar = document.querySelector('.navbar');
+      const parallaxBg = document.querySelector('.parallax-bg');
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset;
+        const docHeight = document.body.offsetHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        if (scrollProgressBar) scrollProgressBar.style.width = scrollPercent + '%';
+        if (scrollTopBtn) scrollTopBtn.classList.toggle('visible', scrollTop > 300);
+        if (navbar) navbar.classList.toggle('scrolled', scrollTop > 50);
+        if (parallaxBg) parallaxBg.style.transform = `translateY(${scrollTop * 0.4}px)`;
+      });
+
+      const modeToggle = document.getElementById('modeToggle');
+      if (modeToggle) {
+          modeToggle.addEventListener('click', () => {
+              document.body.classList.toggle('light-mode');
+              const icon = modeToggle.querySelector('i');
+              if (icon) icon.className = document.body.classList.contains('light-mode') ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
+          });
+          const initialIcon = modeToggle.querySelector('i');
+          if (initialIcon) initialIcon.className = document.body.classList.contains('light-mode') ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
+      }
+
+
+      const particlesContainer = document.getElementById('particles');
+      if (particlesContainer) {
+        for (let i = 0; i < 40; i++) {
+          const particle = document.createElement('div');
+          particle.classList.add('particle');
+          const size = Math.random() * 4 + 1;
+          particle.style.cssText = `width:${size}px; height:${size}px; left:${Math.random()*100}%; top:${Math.random()*100}%; background-color:var(--primary); animation:float ${Math.random()*10+10}s ease-in-out ${Math.random()*5}s infinite;`;
+          particlesContainer.appendChild(particle);
+        }
+        const keyframes = `@keyframes float{0%{transform:translate(0,0)}50%{transform:translate(${Math.random()*30-15}px,${Math.random()*30-15}px)}100%{transform:translate(0,0)}}`;
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = keyframes;
+        document.head.appendChild(styleSheet);
+      }
+
+      const yearEl = document.getElementById('year');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+      let count = 0;
+      const counterDisplay = document.getElementById('counter-display');
+      const updateCounter = () => { if(counterDisplay) counterDisplay.textContent = count; };
+      document.getElementById('increment-btn')?.addEventListener('click', () => { count++; updateCounter(); });
+      document.getElementById('decrement-btn')?.addEventListener('click', () => { count--; updateCounter(); });
+      document.getElementById('reset-btn')?.addEventListener('click', () => { count = 0; updateCounter(); });
+      updateCounter();
+      
+
+      const demoForm = document.getElementById('demo-form');
+      if (demoForm) {
+        demoForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const nameInput = document.getElementById('form-name');
+          const emailInput = document.getElementById('form-email');
+          const status = document.getElementById('form-status');
+          nameInput.classList.remove('is-invalid');
+          emailInput.classList.remove('is-invalid');
+          let isValid = true;
+          if (nameInput.value.trim() === '') {
+            nameInput.classList.add('is-invalid'); isValid = false;
+          }
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+            emailInput.classList.add('is-invalid'); isValid = false;
+          }
+          status.textContent = isValid ? 'Form submitted successfully!' : 'Please fix the errors above.';
+          status.style.color = isValid ? 'green' : 'red';
+          if (isValid) {
+            demoForm.reset();
+            setTimeout(() => status.textContent = '', 3000);
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
